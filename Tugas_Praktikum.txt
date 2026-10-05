@@ -1,0 +1,206 @@
+# ============================================================
+#          SISTEM PERPUSTAKAAN MINI
+#          WATERMARK: KELOMPOK 27
+# ============================================================
+
+# Data buku
+daftar_buku = [
+    {"judul": "Laskar Pelangi", "penulis": "Andrea Hirata", "tersedia": True},
+ {"judul": "Bumi Manusia", "penulis": "Pramoedya Ananta Toer", "tersedia": True},
+    {"judul": "Negeri 5 Menara", "penulis": "Ahmad Fuadi", "tersedia": True},
+    {"judul": "Filosofi Teras", "penulis": "Henry Manampiring", "tersedia": True}
+]
+
+
+# ============================================================
+# FUNCTION
+# ============================================================
+
+# Function dengan return type tanpa parameter
+def jumlah_buku():
+    return len(daftar_buku)
+
+
+# Function dengan return type dan parameter
+def cari_buku(keyword):
+    hasil = []
+
+    for buku in daftar_buku:
+        if keyword.lower() in buku["judul"].lower():
+            hasil.append(buku)
+
+    return hasil
+
+
+# Function non-return type
+def tampilkan_judul_program():
+    print("=" * 55)
+    print("       SISTEM MANAJEMEN PERPUSTAKAAN MINI")
+    print("              WATERMARK: KELOMPOK 27")
+    print("=" * 55)
+
+
+# ============================================================
+# METHOD / CLASS
+# ============================================================
+
+class Perpustakaan:
+
+    def __init__(self, nama):
+        self.nama = nama
+        self.peminjaman = []
+
+    # Method dengan return type dan parameter
+    def pinjam_buku(self, judul):
+        for buku in daftar_buku:
+
+            if buku["judul"].lower() == judul.lower():
+
+                if buku["tersedia"]:
+                    buku["tersedia"] = False
+                    self.peminjaman.append(judul)
+                    return True
+                else:
+                    return False
+
+        return False
+
+    # Method dengan return type tanpa parameter
+    def jumlah_pinjaman(self):
+        return len(self.peminjaman)
+
+    # Method non-return type
+    def tampilkan_peminjaman(self):
+        print("\n--- DAFTAR BUKU YANG DIPINJAM ---")
+
+        if len(self.peminjaman) == 0:
+            print("Belum ada buku yang dipinjam.")
+        else:
+            for nomor, judul in enumerate(self.peminjaman, start=1):
+                print(f"{nomor}. {judul}")
+
+
+# ============================================================
+# CLASS UNTUK TAMPILAN
+# ============================================================
+
+class Tampilan:
+
+    # Method non-return type
+    def garis(self):
+        print("-" * 55)
+
+    # Method non-return type
+    def tampilkan_semua_buku(self):
+        print("\n--- DAFTAR SEMUA BUKU ---")
+
+        for nomor, buku in enumerate(daftar_buku, start=1):
+
+            if buku["tersedia"]:
+                status = "Tersedia"
+            else:
+                status = "Sedang Dipinjam"
+
+            print(
+                f"{nomor}. {buku['judul']} "
+                f"- {buku['penulis']} "
+                f"[{status}]"
+            )
+
+
+# ============================================================
+# PROGRAM UTAMA
+# ============================================================
+
+perpustakaan = Perpustakaan("Perpustakaan Kelompok 27")
+tampilan = Tampilan()
+
+tampilkan_judul_program()
+
+while True:
+
+    print("\nMENU UTAMA")
+    print("1. Lihat semua buku")
+    print("2. Cari buku")
+    print("3. Pinjam buku")
+    print("4. Lihat buku yang dipinjam")
+    print("5. Jumlah buku")
+    print("6. Keluar")
+
+    pilihan = input("\nPilih menu (1-6): ")
+
+    # ========================================================
+    # PENGKONDISIAN
+    # ========================================================
+
+    if pilihan == "1":
+
+        tampilan.tampilkan_semua_buku()
+
+    elif pilihan == "2":
+
+        keyword = input("Masukkan judul buku yang dicari: ")
+
+        hasil = cari_buku(keyword)
+
+        if len(hasil) > 0:
+
+            print("\nBuku ditemukan:")
+
+            # Perulangan
+            for buku in hasil:
+
+                if buku["tersedia"]:
+                    status = "Tersedia"
+                else:
+                    status = "Dipinjam"
+
+                print(
+                    f"- {buku['judul']} "
+                    f"oleh {buku['penulis']} "
+                    f"({status})"
+                )
+
+        else:
+            print("Buku tidak ditemukan.")
+
+    elif pilihan == "3":
+
+        judul = input(
+            "Masukkan judul buku yang ingin dipinjam: "
+        )
+
+        berhasil = perpustakaan.pinjam_buku(judul)
+
+        if berhasil:
+            print("Buku berhasil dipinjam.")
+        else:
+            print(
+                "Buku tidak dapat dipinjam. "
+                "Pastikan judul benar dan buku tersedia."
+            )
+
+    elif pilihan == "4":
+
+        perpustakaan.tampilkan_peminjaman()
+
+    elif pilihan == "5":
+
+        total = jumlah_buku()
+        total_pinjam = perpustakaan.jumlah_pinjaman()
+
+        print(f"\nTotal buku di perpustakaan : {total}")
+        print(f"Buku yang sedang dipinjam : {total_pinjam}")
+
+    elif pilihan == "6":
+
+        print("\n==========================================")
+        print("Terima kasih telah menggunakan")
+        print("Sistem Perpustakaan Mini.")
+        print("WATERMARK: KELOMPOK 27")
+        print("==========================================")
+        break
+
+    else:
+
+        print("Pilihan tidak valid. Silakan pilih 1-6.")
